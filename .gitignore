@@ -1,2 +1,4 @@
 node_modules
 dist
+src/img/*
+!src/img/.gitkeep
