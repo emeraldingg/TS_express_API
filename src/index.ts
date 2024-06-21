@@ -2,12 +2,30 @@ import express, { Express, Request, Response } from "express";
 import fs from "fs";
 import path from "path";
 
-let img: Buffer | null = null;
+interface Image {
+    data: Buffer;
+    extension: string;
+}
+const images: Image[] = [];
 const imageFiles = fs.readdirSync("./src/img")?.filter(file => /\.(jpg|jpeg|png)$/i.test(file));
 if (imageFiles.length > 0) {
-    img = fs.readFileSync(path.join("./src/img", imageFiles[0]));
+    imageFiles.forEach((imgFilename: string) => {
+        const imgPath = path.join("./src/img", imgFilename);
+        images.push({
+            data: fs.readFileSync(imgPath),
+            extension: path.extname(imgPath),
+        });
+    });
 } else {
     console.log("No files found in the directory.");
+}
+
+/**
+ * 
+ * @returns {Image} Random image with data and extension
+ */
+function getRandomImage (): Image {
+    return images[Math.floor(Math.random() * images.length)];
 }
 
 const app: Express = express();
@@ -20,9 +38,10 @@ const PORT = 3000;
 // });
 
 app.get("/", (req: Request, res: Response) => {
+    const img = getRandomImage();
     if(img) {
-        res.type("png");
-        return res.send(img);
+        res.type(img.extension);
+        return res.send(img.data);
     }
     return res.status(404).send("No image found :(");
 });
