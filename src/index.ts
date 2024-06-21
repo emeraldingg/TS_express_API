@@ -1,8 +1,8 @@
-import express from "express";
-const app = express();
+import express, { Express, Request, Response } from "express";
+const app: Express = express();
 const PORT = 3000;
 
-app.get("/", function (req, res) {
+app.get("/", function (req: Request, res: Response) {
     res.send("Hello World");
 });
 
