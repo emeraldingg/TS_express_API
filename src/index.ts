@@ -33,10 +33,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const PORT = 3000;
 
-// app.get("/", (req: Request, res: Response) => {
-//     return res.send("Hello World");
-// });
-
 app.get("/", (req: Request, res: Response) => {
     const img = getRandomImage();
     if(img) {
@@ -47,5 +43,5 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Now listening on PORT ${PORT}!`);
+    console.log(`Now listening on port ${PORT}!`);
 });
