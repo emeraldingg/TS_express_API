@@ -24,7 +24,7 @@ if (imageFiles.length > 0) {
  * 
  * @returns {Image} Random image with data and extension
  */
-function getRandomImage (): Image {
+function getRandomImage(): Image {
     return images[Math.floor(Math.random() * images.length)];
 }
 
@@ -33,7 +33,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const PORT = 3000;
 
-app.get("/", (req: Request, res: Response) => {
+app.get("/image", (req: Request, res: Response) => {
     const img = getRandomImage();
     if(img) {
         res.type(img.extension);
