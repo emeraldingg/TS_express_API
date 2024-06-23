@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Web Server File Upload</title>
+    </head>
+
+    <body>
+        <h1>Web Server File Upload</h1>
+        <form id="upload" enctype="multipart/form-data">
+            <input type="file" id="uploadFiles" accept="image/*" multiple />
+            <br><br>
+            <button>Upload</button>
+            <p id="response"></p>
+        </form>
+
+        <script>
+            const uploadForm = document.getElementById("upload");
+            async function sendFiles() {
+                const uploadedFiles = document.getElementById("uploadFiles").files;
+                const formData = new FormData(document.getElementById("upload"));
+                
+                for(const key in uploadedFiles) {
+                    formData.append("uploadedFiles", uploadedFiles[key]);
+                }
+
+                const response = await fetch("http://localhost:3000/upload", {
+                    method: "POST",
+                    body: formData
+                })
+                
+                const json = response.ok ? await response.json() : null;
+                document.getElementById("response").innerHTML = json?.msg || "";
+            }
+
+            uploadForm.addEventListener("submit", (event) => {
+                event.preventDefault();
+                sendFiles();
+            });
+        </script>
+    </body>
+
+</html>

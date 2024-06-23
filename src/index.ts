@@ -1,6 +1,11 @@
 import express, { Express, Request, Response } from "express";
+import multer from "multer";
 import fs from "fs";
 import path from "path";
+
+// import fileExtensionLimiter from "./middleware/fileExtensionLimit";
+// import fileSizeLimiter from "./middleware/fileSizeLimit";
+// import fileExists from "./middleware/fileExists";
 
 interface Image {
     data: Buffer;
@@ -41,6 +46,29 @@ app.get("/image", (req: Request, res: Response) => {
     }
     return res.status(404).send("No image found :(");
 });
+
+
+app.get("/", (req: Request, res: Response) => {
+    res.sendFile(path.resolve("./src/", "index.html"));
+});
+
+const upload = multer({
+    storage: multer.memoryStorage(),
+    limits: {
+        files: 2,
+        fileSize: 2097152,
+    },
+});
+app.post("/upload",
+    upload.array("uploadedFiles", 5),
+    (req: Request, res: Response) => {
+        console.log(req);
+        return res.json({
+            msg: `${req.files?.length} files received!`
+        });
+    }
+);
+
 
 app.listen(PORT, () => {
     console.log(`Now listening on port ${PORT}!`);
