@@ -57,8 +57,9 @@ const fileSizeLimit = MB * 1024 * 1024;
 const upload = multer({
     storage: multer.memoryStorage(),
     limits: {
-        files: 2,
+        files: 10,
         fileSize: fileSizeLimit,
+        parts: 20
     },
 });
 app.post("/upload",
