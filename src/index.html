@@ -30,7 +30,7 @@
                     body: formData
                 })
                 
-                const json = response.ok ? await response.json() : null;
+                const json = response.status != 500 ? await response.json() : null;
                 document.getElementById("response").innerHTML = json?.msg || "";
             }
 

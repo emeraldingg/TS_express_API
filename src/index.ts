@@ -3,9 +3,9 @@ import multer from "multer";
 import fs from "fs";
 import path from "path";
 
-// import fileExtensionLimiter from "./middleware/fileExtensionLimit";
-// import fileSizeLimiter from "./middleware/fileSizeLimit";
-// import fileExists from "./middleware/fileExists";
+import fileExtensionLimiter from "./middleware/fileExtensionLimit.js";
+import fileSizeLimiter from "./middleware/fileSizeLimit.js";
+import fileExists from "./middleware/fileExists.js";
 
 interface Image {
     data: Buffer;
@@ -52,15 +52,20 @@ app.get("/", (req: Request, res: Response) => {
     res.sendFile(path.resolve("./src/", "index.html"));
 });
 
+const MB = 10;
+const fileSizeLimit = MB * 1024 * 1024;
 const upload = multer({
     storage: multer.memoryStorage(),
     limits: {
         files: 2,
-        fileSize: 2097152,
+        fileSize: fileSizeLimit,
     },
 });
 app.post("/upload",
     upload.array("uploadedFiles", 5),
+    fileExists,
+    fileExtensionLimiter,
+    fileSizeLimiter,
     (req: Request, res: Response) => {
         console.log(req);
         return res.json({

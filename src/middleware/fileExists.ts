@@ -8,7 +8,7 @@ import { Request, Response, NextFunction } from "express";
  * @returns {Response | undefined} Express response
  */
 function fileExists(req: Request, res: Response, next: NextFunction) {
-    if(!req.files) {
+    if(!req.files || !req.files.length) {
         return res.status(400).json({
             msg: "Missing files!"
         });
